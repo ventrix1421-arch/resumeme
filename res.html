@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Minimal ATS Resume Engine</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- ATS Friendly Google Fonts Integration -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&block=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Page Setup for Screen Preview */
+        .resume-page {
+            background: white !important;
+            color: #0f172a !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease-in-out;
+            margin: 0 auto;
+        }
+
+        /* Dynamic Sizes via Classes */
+        .size-letter { width: 8.5in; height: 11in; padding: 0.5in; }
+        .size-a4     { width: 8.27in; height: 11.69in; padding: 0.5in; }
+        .size-long   { width: 8.5in; height: 13in; padding: 0.55in; }
+
+        /* Dynamic Font Configurations */
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .font-roboto { font-family: 'Roboto', sans-serif; }
+        .font-opensans { font-family: 'Open Sans', sans-serif; }
+        .font-lora { font-family: 'Lora', serif; }
+        .font-merriweather { font-family: 'Merriweather', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Print Layout Forcing */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #preview-container, #resume-preview, #resume-preview * {
+                visibility: visible;
+            }
+            body {
+                background: white !important;
+            }
+            #preview-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                display: block;
+            }
+            .resume-page {
+                box-shadow: none !important;
+                margin: 0 !important;
+                border: none !important;
+                background: white !important;
+                color: #0f172a !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Minimal Custom Scrollbars */
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800 font-sans antialiased h-screen overflow-hidden">
+
+    <div class="flex h-full w-full">
+        
+        <!-- LEFT SIDE: ULTRA-CLEAN WHITE & #EEE BORDER CONTROL PANEL -->
+        <div class="w-1/2 h-full bg-white border-r border-[#eee] flex flex-col no-print shadow-sm z-10">
+            
+            <!-- Controls & Settings Header -->
+            <div class="p-4 border-b border-[#eee] flex flex-wrap gap-3 justify-between items-center bg-white">
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Layout Config -->
+                    <div class="flex items-center gap-1.5">
+                        <label for="layout-style" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Layout:</label>
+                        <select id="layout-style" onchange="changeLayout(this.value)" class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
+                            <option value="top">Standard Top Header</option>
+                            <option value="left">Split Left Column</option>
+                            <option value="compact">Compact Minimalist Line</option>
+                            <option value="centered">Centered Elegant</option>
+                        </select>
+                    </div>
+
+                    <!-- Font Config -->
+                    <div class="flex items-center gap-1.5">
+                        <label for="font-family" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Font:</label>
+                        <select id="font-family" onchange="changeFontFamily(this.value)" class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
+                            <option value="font-inter">Inter (Clean Sans)</option>
+                            <option value="font-roboto">Roboto (Modern)</option>
+                            <option value="font-opensans">Open Sans (Highly Readable)</option>
+                            <option value="font-lora">Lora (Classic Serif)</option>
+                            <option value="font-merriweather">Merriweather (Premium Serif)</option>
+                            <option value="font-mono">JetBrains Mono (Tech Tech)</option>
+                        </select>
+                    </div>
+
+                    <!-- Size Config -->
+                    <div class="flex items-center gap-1.5">
+                        <label for="font-size" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Size:</label>
+                        <select id="font-size" onchange="changeFontSize(this.value)" class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
+                            <option value="text-[9px]">9px (Extra Compact)</option>
+                            <option value="text-[10px]">10px (Compact)</option>
+                            <option value="text-[10.5px]" selected>10.5px (Standard ATS)</option>
+                            <option value="text-[11px]">11px (Highly Legible)</option>
+                            <option value="text-[12px]">12px (Large)</option>
+                            <option value="text-[13px]">13px (Extra Large)</option>
+                        </select>
+                    </div>
+
+                    <!-- Paper Config -->
+                    <div class="flex items-center gap-1.5">
+                        <label for="paper-size" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Paper:</label>
+                        <select id="paper-size" onchange="changePaperSize(this.value)" class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
+                            <option value="size-letter">Letter</option>
+                            <option value="size-a4">A4</option>
+                            <option value="size-long">Long</option>
+                        </select>
+                    </div>
+                    
+                <button onclick="window.print()" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-semibold rounded shadow-sm transition">
+                    Print / Save PDF
+                </button>
+                </div>
+            </div>
+
+            <!-- Inputs Container -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scroll pb-24" id="form-container">
+                
+                <!-- Contact Details -->
+                <section class="space-y-3">
+                    <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-[#eee] pb-1">Personal Details</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="input-name" value="Juan Dela Cruz" placeholder="Full Name" class="col-span-2 px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-role" value="Full Stack Web Developer" placeholder="Target Position" class="col-span-2 px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="email" id="input-email" value="juan.delacruz@email.com" placeholder="Email Address" class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-phone" value="+63 912 345 6789" placeholder="Phone Number" class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-location" value="Manila, Philippines" placeholder="Location" class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-link" value="github.com/juandelacruz" placeholder="Portfolio / LinkedIn" class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                    </div>
+                </section>
+
+                <!-- Professional Summary -->
+                <section class="space-y-3">
+                    <div class="flex gap-2 items-center border-b border-[#eee] pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Title:</span>
+                        <input type="text" id="input-summary-title" value="Professional Summary" placeholder="e.g., Objectives" class="bg-transparent text-xs font-bold text-slate-800 uppercase tracking-wider outline-none border border-transparent focus:border-slate-300 px-1 py-0.5 rounded transition w-1/2">
+                    </div>
+                    <textarea id="input-summary" rows="3" placeholder="Write your profile statement here..." class="w-full px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">Versatile Full Stack Developer with 3+ years of experience engineering high-performance, responsive web applications. Highly proficient in JavaScript, modern frameworks, and optimized database management. Proven track record of delivering clean, scalable code and seamless user experiences while managing complex data structures across robust, end-to-end software development lifecycles.</textarea>
+                </section>
+
+                <!-- Experience -->
+                <section class="space-y-3">
+                    <div class="flex justify-between items-center border-b border-[#eee] pb-1">
+                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Work Experience</h2>
+                        <button onclick="addExperience()" class="inline-flex items-center gap-1 text-[10px] bg-white hover:bg-slate-50 border border-[#eee] text-slate-700 px-2 py-1 rounded font-medium transition">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg> Add Experience
+                        </button>
+                    </div>
+                    <div id="experience-fields" class="space-y-3">
+                        <div class="experience-item p-3 border border-[#eee] rounded bg-stone-50/50 relative space-y-2">
+                            <button onclick="this.parentElement.remove(); triggerUpdate();" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xs">✕</button>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" placeholder="Company Name" value="Tech Innovations Inc." class="exp-company px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Job Title" value="Junior Developer" class="exp-role px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Duration" value="2024 - Present" class="exp-date px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Location" value="Makati City" class="exp-loc px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                            </div>
+                            <textarea placeholder="Job Responsibilities (One item per line)" class="exp-desc w-full px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs" rows="2">• Developed features using React and Node.js.&#10;• Improved page loading speeds by 15%.</textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Education -->
+                <section class="space-y-3">
+                    <div class="flex justify-between items-center border-b border-[#eee] pb-1">
+                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Education</h2>
+                        <button onclick="addEducation()" class="inline-flex items-center gap-1 text-[10px] bg-white hover:bg-slate-50 border border-[#eee] text-slate-700 px-2 py-1 rounded font-medium transition">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg> Add Education
+                        </button>
+                    </div>
+                    <div id="education-fields" class="space-y-3">
+                        <div class="education-item p-3 border border-[#eee] rounded bg-stone-50/50 relative space-y-2">
+                            <button onclick="this.parentElement.remove(); triggerUpdate();" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xs">✕</button>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" placeholder="School/University" value="Polytechnic University of the Philippines" class="edu-school px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs col-span-2">
+                                <input type="text" placeholder="Degree / Course" value="B.S. in Information Technology" class="edu-degree px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Year Graduated" value="2023" class="edu-date px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dynamic Custom Sections Placement Area -->
+                <div id="custom-fields-container" class="space-y-6"></div>
+
+                <hr class="border-[#eee]">
+
+                <!-- Factory Module -->
+                <section class="p-4 bg-white border border-dashed border-slate-300 rounded-xl space-y-3">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Create Custom Section</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="new-section-title" placeholder="e.g., Projects, Certifications, Skills" class="col-span-2 px-3 py-1.5 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs outline-none focus:border-slate-400">
+                        <select id="new-section-type" class="bg-white border border-[#eee] text-xs rounded px-2 text-slate-700 outline-none focus:border-slate-400">
+                            <option value="bullet">Bullet List Block</option>
+                            <option value="list">List Block (Label: item, item)</option>
+                            <option value="paragraph">Paragraph Block</option>
+                        </select>
+                        <button onclick="createNewSection()" class="inline-flex items-center justify-center gap-1 bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg> Add Section
+                        </button>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: REALTIME LIVE PREVIEW -->
+        <div id="preview-container" class="w-1/2 h-full bg-stone-100 overflow-y-auto flex items-start justify-center p-8 custom-scroll">
+            
+            <!-- Target Document Frame -->
+            <div id="resume-preview" class="resume-page size-letter text-slate-900 text-[10.5px] leading-relaxed font-inter">
+                
+                <div id="layout-wrapper" class="h-full flex flex-col">
+                    
+                    <!-- TOP / PANEL HEADER CONTAINER -->
+                    <div id="meta-panel" class="mb-4">
+                        <div id="meta-content" class="text-center border-b-[1.5px] border-slate-800 pb-2.5 mb-2">
+                            <h1 id="view-name" class="text-xl font-bold uppercase tracking-wide mb-0.5 text-slate-900"></h1>
+                            <h2 id="view-role" class="text-xs font-medium text-slate-500 tracking-wide mb-2"></h2>
+                            <div id="contact-lines" class="flex justify-center items-center gap-x-2 text-[10px] text-slate-600 flex-wrap">
+                                <span id="view-email"></span> <span class="divider">•</span> 
+                                <span id="view-phone"></span> <span class="divider">•</span> 
+                                <span id="view-location"></span> <span class="divider">•</span> 
+                                <span id="view-link"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MAIN SECTIONS ATS WORKFLOW CONTAINER -->
+                    <div id="main-panel" class="flex-1 space-y-4">
+                        <!-- Summary Block -->
+                        <div class="section-container">
+                            <h3 id="view-summary-title" class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">Professional Summary</h3>
+                            <p id="view-summary" class="text-slate-700 text-justify tracking-normal break-words whitespace-normal overflow-wrap-anywhere"></p>
+                        </div>
+
+                        <!-- Experience -->
+                        <div class="section-container">
+                            <h3 class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1.5 text-slate-800">Professional Experience</h3>
+                            <div id="view-experience-group" class="space-y-2.5"></div>
+                        </div>
+
+                        <!-- Education -->
+                        <div class="section-container">
+                            <h3 class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">Education</h3>
+                            <div id="view-education-group" class="space-y-1.5"></div>
+                        </div>
+
+                        <!-- Dynamic Added Sections -->
+                        <div id="view-custom-group" class="space-y-4"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Live Document Core Processor Engine -->
+    <script>
+        let customSectionsList = [];
+        let currentLayout = 'top';
+
+        // Custom Font Family Handler
+        function changeFontFamily(fontClass) {
+            const preview = document.getElementById('resume-preview');
+            preview.classList.remove('font-inter', 'font-roboto', 'font-opensans', 'font-lora', 'font-merriweather', 'font-mono');
+            preview.classList.add(fontClass);
+        }
+
+        // Custom Font Size Handler
+        function changeFontSize(sizeClass) {
+            const preview = document.getElementById('resume-preview');
+            preview.classList.remove('text-[9px]', 'text-[10px]', 'text-[10.5px]', 'text-[11px]', 'text-[12px]', 'text-[13px]');
+            preview.classList.add(sizeClass);
+        }
+
+        // Dynamic System Layout View Manager (ATS Strict Rules)
+        function changeLayout(type) {
+            currentLayout = type;
+            const wrapper = document.getElementById('layout-wrapper');
+            const metaPanel = document.getElementById('meta-panel');
+            const metaContent = document.getElementById('meta-content');
+            const contactLines = document.getElementById('contact-lines');
+            const dividers = document.querySelectorAll('.divider');
+
+            // Reset dynamic setups cleanly
+            wrapper.className = "h-full flex flex-col";
+            metaPanel.className = "mb-4";
+            metaContent.className = "border-b-[1.5px] border-slate-800 pb-2.5 mb-2";
+            contactLines.className = "flex justify-center items-center gap-x-2 text-[10px] text-slate-600 flex-wrap";
+            dividers.forEach(d => d.style.display = 'inline');
+
+            if (type === 'left') {
+                wrapper.className = "flex gap-x-6 h-full";
+                metaPanel.className = "w-1/4 border-r border-slate-200 pr-4 text-left space-y-3";
+                metaContent.className = "text-left border-none p-0 m-0";
+                contactLines.className = "flex flex-col gap-y-1.5 text-[9.5px] text-slate-600 items-start mt-3";
+                dividers.forEach(d => d.style.display = 'none');
+            } else if (type === 'compact') {
+                metaContent.className = "text-left border-b border-slate-800 pb-1 mb-2 flex justify-between items-end";
+                contactLines.className = "flex items-center gap-x-2 text-[9.5px] text-slate-600 flex-wrap justify-end";
+            } else if (type === 'centered') {
+                metaContent.className = "text-center pb-2 mb-2 border-b border-slate-200";
+            } else {
+                metaContent.className = "text-center border-b-[1.5px] border-slate-800 pb-2.5 mb-2";
+            }
+            renderLivePreview();
+        }
+
+        // Paper Dimensions Configuration Setup
+        function changePaperSize(selectedClass) {
+            const preview = document.getElementById('resume-preview');
+            preview.classList.remove('size-letter', 'size-a4', 'size-long');
+            preview.classList.add(selectedClass);
+            
+            const styleId = "print-size-css";
+            let printStyle = document.getElementById(styleId);
+            if (!printStyle) {
+                printStyle = document.createElement('style');
+                printStyle.id = styleId;
+                document.head.appendChild(printStyle);
+            }
+            
+            let sizeRule = "letter";
+            if(selectedClass === 'size-a4') sizeRule = "A4";
+            if(selectedClass === 'size-long') sizeRule = "8.5in 13in";
+            
+            printStyle.innerHTML = `@media print { @page { size: ${sizeRule}; margin: 0; } }`;
+        }
+
+        // Custom Sections Engine
+        function createNewSection() {
+            const titleInput = document.getElementById('new-section-title');
+            const typeSelect = document.getElementById('new-section-type');
+            
+            const title = titleInput.value.trim();
+            const type = typeSelect.value;
+            if(!title) return;
+
+            const sectionId = "custom-" + title.toLowerCase().replace(/[^a-z0-9]/g, "-");
+            if(customSectionsList.some(sec => sec.id === sectionId)) {
+                alert("This section title already exists!");
+                return;
+            }
+
+            customSectionsList.push({ id: sectionId, name: title, type: type });
+
+            const fieldsContainer = document.getElementById('custom-fields-container');
+            const sectionHTML = document.createElement('section');
+            sectionHTML.className = "space-y-3 custom-section-node border-t border-[#eee] pt-4";
+            sectionHTML.setAttribute('data-id', sectionId);
+            sectionHTML.setAttribute('data-name', title);
+            sectionHTML.setAttribute('data-type', type);
+
+            if(type === 'list') {
+                sectionHTML.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">${title} (List View)</h2>
+                        <button onclick="removeCustomSection('${sectionId}', this)" class="text-slate-400 hover:text-red-500 text-xs">Remove</button>
+                    </div>
+                    <div class="space-y-2 sub-list-fields">
+                        <div class="flex gap-2 item-row">
+                            <input type="text" placeholder="Label (e.g., Tech Skills)" class="list-label w-1/3 px-2 py-1.5 border border-[#eee] bg-white text-slate-800 text-xs rounded outline-none">
+                            <input type="text" placeholder="Values (comma separated)" class="list-values w-2/3 px-2 py-1.5 border border-[#eee] bg-white text-slate-800 text-xs rounded outline-none">
+                        </div>
+                    </div>
+                    <button onclick="addListRow(this)" class="text-[10px] text-slate-500 hover:underline flex items-center gap-0.5">+ Add List Row</button>
+                `;
+            } else if (type === 'bullet') {
+                sectionHTML.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">${title} (Bullet List)</h2>
+                        <button onclick="removeCustomSection('${sectionId}', this)" class="text-slate-400 hover:text-red-500 text-xs">Remove</button>
+                    </div>
+                    <textarea class="custom-value-input w-full px-3 py-2 border border-[#eee] bg-white text-slate-800 rounded text-xs focus:border-slate-400 outline-none" rows="3" placeholder="• Bullet item entry one&#10;• Bullet item entry two (One per line)"></textarea>
+                `;
+            } else {
+                sectionHTML.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">${title} (Paragraph View)</h2>
+                        <button onclick="removeCustomSection('${sectionId}', this)" class="text-slate-400 hover:text-red-500 text-xs">Remove</button>
+                    </div>
+                    <textarea class="custom-value-input w-full px-3 py-2 border border-[#eee] bg-white text-slate-800 rounded text-xs focus:border-slate-400 outline-none" rows="2" placeholder="Write paragraphs..."></textarea>
+                `;
+            }
+
+            fieldsContainer.appendChild(sectionHTML);
+            titleInput.value = ''; 
+            attachListeners();
+            renderLivePreview();
+        }
+
+        function addListRow(btn) {
+            const container = btn.parentElement.querySelector('.sub-list-fields');
+            const row = document.createElement('div');
+            row.className = "flex gap-2 item-row mt-1.5 relative";
+            row.innerHTML = `
+                <input type="text" placeholder="Label" class="list-label w-1/3 px-2 py-1.5 border border-[#eee] bg-white text-slate-800 text-xs rounded outline-none">
+                <input type="text" placeholder="Values (comma separated)" class="list-values w-2/3 px-2 py-1.5 border border-[#eee] bg-white text-slate-800 text-xs rounded outline-none">
+                <button onclick="this.parentElement.remove(); triggerUpdate();" class="text-slate-400 hover:text-red-500 text-xs px-1">✕</button>
+            `;
+            container.appendChild(row);
+            attachListeners();
+        }
+
+        function removeCustomSection(id, element) {
+            element.closest('.custom-section-node').remove();
+            customSectionsList = customSectionsList.filter(sec => sec.id !== id);
+            renderLivePreview();
+        }
+
+        function addExperience() {
+            const container = document.getElementById('experience-fields');
+            const div = document.createElement('div');
+            div.className = "experience-item p-3 border border-[#eee] rounded bg-stone-50/50 relative space-y-2";
+            div.innerHTML = `
+                <button onclick="this.parentElement.remove(); triggerUpdate();" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xs">✕</button>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" placeholder="Company Name" class="exp-company px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                    <input type="text" placeholder="Job Title" class="exp-role px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                    <input type="text" placeholder="Duration" class="exp-date px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                    <input type="text" placeholder="Location" class="exp-loc px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                </div>
+                <textarea placeholder="Job Responsibilities (One item per line)" class="exp-desc w-full px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs" rows="2"></textarea>
+            `;
+            container.appendChild(div);
+            attachListeners();
+        }
+
+        function addEducation() {
+            const container = document.getElementById('education-fields');
+            const div = document.createElement('div');
+            div.className = "education-item p-3 border border-[#eee] rounded bg-stone-50/50 relative space-y-2";
+            div.innerHTML = `
+                <button onclick="this.parentElement.remove(); triggerUpdate();" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xs">✕</button>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" placeholder="School/University" class="edu-school px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs col-span-2">
+                    <input type="text" placeholder="Degree / Course" class="edu-degree px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                    <input type="text" placeholder="Year Graduated" class="edu-date px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                </div>
+            `;
+            container.appendChild(div);
+            attachListeners();
+        }
+
+        // Live Frame Compilation
+        function renderLivePreview() {
+            const nameVal = document.getElementById('input-name').value || "Your Name";
+            const roleVal = document.getElementById('input-role').value || "Target Role Position";
+            const emailVal = document.getElementById('input-email').value || "email@address.com";
+            const phoneVal = document.getElementById('input-phone').value || "";
+            const locVal = document.getElementById('input-location').value || "";
+            const linkVal = document.getElementById('input-link').value || "";
+
+            if (currentLayout === 'compact') {
+                document.getElementById('meta-content').innerHTML = `
+                    <div>
+                        <h1 id="view-name" class="text-lg font-bold uppercase tracking-wide text-slate-900">${nameVal}</h1>
+                        <h2 id="view-role" class="text-[11px] font-medium text-slate-500 tracking-wide">${roleVal}</h2>
+                    </div>
+                    <div id="contact-lines" class="flex items-center gap-x-2 text-[9.5px] text-slate-600 flex-wrap justify-end">
+                        <span>${emailVal}</span> <span class="divider">•</span> 
+                        <span>${phoneVal}</span> ${phoneVal && locVal ? '<span class="divider">•</span>' : ''} 
+                        <span>${locVal}</span> ${locVal && linkVal ? '<span class="divider">•</span>' : ''} 
+                        <span>${linkVal}</span>
+                    </div>
+                `;
+            } else {
+                document.getElementById('meta-panel').innerHTML = `
+                    <div id="meta-content" class="${currentLayout === 'left' ? 'text-left border-none p-0 m-0' : currentLayout === 'centered' ? 'text-center pb-2 mb-2 border-b border-slate-200' : 'text-center border-b-[1.5px] border-slate-800 pb-2.5 mb-2'}">
+                        <h1 id="view-name" class="text-xl font-bold uppercase tracking-wide mb-0.5 text-slate-900">${nameVal}</h1>
+                        <h2 id="view-role" class="text-xs font-medium text-slate-500 tracking-wide mb-2">${roleVal}</h2>
+                        <div id="contact-lines" class="${currentLayout === 'left' ? 'flex flex-col gap-y-1.5 text-[9.5px] text-slate-600 items-start mt-3' : 'flex justify-center items-center gap-x-2 text-[10px] text-slate-600 flex-wrap'}">
+                            <span>${emailVal}</span> ${currentLayout !== 'left' ? '<span class="divider">•</span>' : ''} 
+                            <span>${phoneVal}</span> ${currentLayout !== 'left' ? '<span class="divider">•</span>' : ''} 
+                            <span>${locVal}</span> ${currentLayout !== 'left' ? '<span class="divider">•</span>' : ''} 
+                            <span>${linkVal}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            const dynamicTitle = document.getElementById('input-summary-title').value || "Professional Summary";
+            document.getElementById('view-summary-title').innerText = dynamicTitle;
+            document.getElementById('view-summary').innerText = document.getElementById('input-summary').value;
+
+            // Compile Experience
+            const expContainer = document.getElementById('view-experience-group');
+            expContainer.innerHTML = '';
+            document.querySelectorAll('.experience-item').forEach(item => {
+                const company = item.querySelector('.exp-company').value;
+                const role = item.querySelector('.exp-role').value;
+                const date = item.querySelector('.exp-date').value;
+                const loc = item.querySelector('.exp-loc').value;
+                const desc = item.querySelector('.exp-desc').value;
+
+                if(company || role) {
+                    const block = document.createElement('div');
+                    block.className = "break-words whitespace-normal";
+                    let bulletsHTML = '';
+                    if(desc) {
+                        desc.split('\n').forEach(line => {
+                            let clean = line.trim();
+                            if(clean.startsWith('•') || clean.startsWith('-')) clean = clean.substring(1).trim();
+                            if(clean) bulletsHTML += `<li class="break-words">${clean}</li>`;
+                        });
+                    }
+                    block.innerHTML = `
+                        <div class="flex justify-between items-baseline font-bold break-words text-slate-900">
+                            <span>${company || 'Company'}</span>
+                            <span class="font-normal text-slate-500 text-[9.5px]">${date}</span>
+                        </div>
+                        <div class="flex justify-between items-baseline text-slate-600 italic mb-0.5 break-words">
+                            <span>${role || 'Position Title'}</span>
+                            <span class="not-italic text-slate-500 text-[9.5px]">${loc}</span>
+                        </div>
+                        <ul class="list-disc pl-4 space-y-0.5 text-slate-700 text-justify break-words">${bulletsHTML}</ul>
+                    `;
+                    expContainer.appendChild(block);
+                }
+            });
+
+            // Compile Education
+            const eduContainer = document.getElementById('view-education-group');
+            eduContainer.innerHTML = '';
+            document.querySelectorAll('.education-item').forEach(item => {
+                const school = item.querySelector('.edu-school').value;
+                const degree = item.querySelector('.edu-degree').value;
+                const date = item.querySelector('.edu-date').value;
+
+                if(school || degree) {
+                    const row = document.createElement('div');
+                    row.className = "flex justify-between items-baseline break-words text-slate-900";
+                    row.innerHTML = `
+                        <div class="break-words"><span class="font-bold">${school}</span> — <span class="text-slate-600 italic">${degree}</span></div>
+                        <span class="text-slate-500 text-[9.5px]">${date}</span>
+                    `;
+                    eduContainer.appendChild(row);
+                }
+            });
+
+            // Compile Custom Viewports
+            const customContainer = document.getElementById('view-custom-group');
+            customContainer.innerHTML = '';
+            
+            document.querySelectorAll('.custom-section-node').forEach(node => {
+                const name = node.getAttribute('data-name');
+                const type = node.getAttribute('data-type');
+                
+                const block = document.createElement('div');
+                block.className = "break-words";
+                
+                if (type === 'list') {
+                    let rowsHTML = '';
+                    node.querySelectorAll('.item-row').forEach(row => {
+                        const label = row.querySelector('.list-label').value.trim();
+                        const values = row.querySelector('.list-values').value.trim();
+                        if(label || values) {
+                            rowsHTML += `<p class="text-slate-700 break-words"><strong class="font-bold text-slate-800">${label}:</strong> ${values}</p>`;
+                        }
+                    });
+                    
+                    if(rowsHTML) {
+                        block.innerHTML = `
+                            <h3 class="text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">${name}</h3>
+                            <div class="space-y-0.5 break-words">${rowsHTML}</div>
+                        `;
+                        customContainer.appendChild(block);
+                    }
+                } else if (type === 'bullet') {
+                    const textVal = node.querySelector('.custom-value-input').value.trim();
+                    if(textVal) {
+                        let bulletsHTML = '';
+                        textVal.split('\n').forEach(line => {
+                            let clean = line.trim();
+                            if(clean.startsWith('•') || clean.startsWith('-')) clean = clean.substring(1).trim();
+                            if(clean) bulletsHTML += `<li class="break-words">${clean}</li>`;
+                        });
+
+                        block.innerHTML = `
+                            <h3 class="text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">${name}</h3>
+                            <ul class="list-disc pl-4 space-y-0.5 text-slate-700 text-justify break-words">${bulletsHTML}</ul>
+                        `;
+                        customContainer.appendChild(block);
+                    }
+                } else {
+                    const textVal = node.querySelector('.custom-value-input').value.trim();
+                    if(textVal) {
+                        block.innerHTML = `
+                            <h3 class="text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">${name}</h3>
+                            <p class="text-slate-700 text-justify break-words">${textVal}</p>
+                        `;
+                        customContainer.appendChild(block);
+                    }
+                }
+            });
+        }
+
+        function triggerUpdate() {
+            renderLivePreview();
+        }
+
+        function attachListeners() {
+            const inputs = document.getElementById('form-container').querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.removeEventListener('input', renderLivePreview);
+                input.addEventListener('input', renderLivePreview);
+            });
+        }
+
+        document.getElementById('form-container').addEventListener('input', renderLivePreview);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            changePaperSize('size-letter');
+            attachListeners();
+            renderLivePreview();
+        });
+    </script>
+</body>
+</html>
