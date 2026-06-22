@@ -21,6 +21,15 @@
             margin: 0 auto;
         }
 
+        /* 2x2 Passport Photo CSS Rule Specifications */
+        .photo-2x2 {
+            width: 115px;
+            height: 115px;
+            border: 1px solid #cbd5e1;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
         /* Dynamic Sizes via Classes */
         .size-letter { width: 8.5in; height: 11in; padding: 0.5in; }
         .size-a4     { width: 8.27in; height: 11.69in; padding: 0.5in; }
@@ -141,7 +150,58 @@
                     Print / Save PDF
                 </button>
                 </div>
+
+    <div class="flex items-start gap-4">
+
+        <!-- Left: Upload -->
+        <div class="flex items-center gap-3">
+            <div id="upload-indicator-box"
+                class="w-14 h-14 border-2 border-dashed border-slate-300 bg-white flex items-center justify-center text-slate-400 text-[9px] text-center p-1 rounded font-medium">
+                No Photo
             </div>
+
+            <img id="upload-preview-thumbnail"
+                class="w-14 h-14 object-cover rounded border hidden"
+                alt="Thumb">
+
+            <div>
+                <input type="file"
+                    id="photo-file-node"
+                    accept="image/*"
+                    class="hidden"
+                    onchange="executePhotoCropEngine(this)">
+
+                <button type="button"
+                    onclick="document.getElementById('photo-file-node').click()"
+                    class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3 py-1.5 rounded transition-colors">
+                    Upload Photo
+                </button>
+
+                <button type="button"
+                    id="delete-photo-btn"
+                    onclick="purgeUploadedPhoto()"
+                    class="text-red-500 hover:underline text-xs ml-3 hidden">
+                    Remove
+                </button>
+            </div>
+        </div>
+
+        <!-- Right: Tips -->
+        <div class="flex-1 text-[10px] text-slate-500 border-l border-slate-200 pl-4">
+            <h4 class="font-semibold text-slate-700 mb-1">📌 Tips</h4>
+            <ul class="list-disc pl-4 space-y-1">
+                <li>Use a recent passport-style photo.</li>
+                <li>Face the camera directly.</li>
+                <li>Keep the background plain (white or light).</li>
+                <li>Good lighting improves print quality.</li>
+                <li>The image is automatically cropped to a 2×2 square.</li>
+                <li>High-resolution images produce better PDF output.</li>
+            </ul>
+        </div>
+
+            </div>
+            </div>
+            
 
             <!-- Inputs Container -->
             <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scroll pb-24" id="form-container">
@@ -288,10 +348,65 @@
 
     </div>
 
+    <canvas id="photo-crop-canvas" class="hidden" width="300" height="300"></canvas>
+
     <!-- Live Document Core Processor Engine -->
     <script>
         let customSectionsList = [];
         let currentLayout = 'top';
+        let processedPhotoBase64Stream = null;
+
+        // 2x2 Image Transformer Crop Processing Utility Engine Block
+        function executePhotoCropEngine(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const canvasImg = new Image();
+                    canvasImg.onload = function() {
+                        const canvas = document.getElementById('photo-crop-canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Strict 1:1 Aspect ratio square crop generation formula algorithms logic
+                        let sideLength = canvasImg.width;
+                        let startPointX = 0;
+                        let startPointY = 0;
+                        
+                        if (canvasImg.width > canvasImg.height) {
+                            sideLength = canvasImg.height;
+                            startPointX = (canvasImg.width - canvasImg.height) / 2;
+                        } else {
+                            sideLength = canvasImg.width;
+                            startPointY = (canvasImg.height - canvasImg.width) / 2;
+                        }
+                        
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(canvasImg, startPointX, startPointY, sideLength, sideLength, 0, 0, canvas.width, canvas.height);
+                        
+                        processedPhotoBase64Stream = canvas.toDataURL('image/jpeg', 0.95);
+                        
+                        // Update control panel view states cleanly
+                        document.getElementById('upload-indicator-box').classList.add('hidden');
+                        const thumb = document.getElementById('upload-preview-thumbnail');
+                        thumb.src = processedPhotoBase64Stream;
+                        thumb.classList.remove('hidden');
+                        document.getElementById('delete-photo-btn').classList.remove('hidden');
+                        
+                        renderLivePreview();
+                    };
+                    canvasImg.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function purgeUploadedPhoto() {
+            processedPhotoBase64Stream = null;
+            document.getElementById('photo-file-node').value = '';
+            document.getElementById('upload-indicator-box').classList.remove('hidden');
+            document.getElementById('upload-preview-thumbnail').classList.add('hidden');
+            document.getElementById('delete-photo-btn').classList.add('hidden');
+            renderLivePreview();
+        }
 
         // Custom Font Family Handler
         function changeFontFamily(fontClass) {
@@ -315,6 +430,7 @@
             const metaContent = document.getElementById('meta-content');
             const contactLines = document.getElementById('contact-lines');
             const dividers = document.querySelectorAll('.divider');
+            
 
             // Reset dynamic setups cleanly
             wrapper.className = "h-full flex flex-col";
@@ -476,8 +592,7 @@
             attachListeners();
         }
 
-        // Live Frame Compilation
-        function renderLivePreview() {
+         function renderLivePreview() {
             const nameVal = document.getElementById('input-name').value || "Your Name";
             const roleVal = document.getElementById('input-role').value || "Target Role Position";
             const emailVal = document.getElementById('input-email').value || "email@address.com";
@@ -485,31 +600,71 @@
             const locVal = document.getElementById('input-location').value || "";
             const linkVal = document.getElementById('input-link').value || "";
 
-            if (currentLayout === 'compact') {
-                document.getElementById('meta-content').innerHTML = `
+            const metaContent = document.getElementById('meta-content');
+
+            // Generate HTML structures explicitly dynamically for 2x2 images
+            const imageNodeStringBlock = processedPhotoBase64Stream ? `<img src="${processedPhotoBase64Stream}" class="photo-2x2 shadow-sm rounded-sm" alt="Profile Layout Photo">` : '';
+
+            // Handle original designs layout states variations securely matching original specifications
+            if (currentLayout === 'left') {
+                metaContent.className = "text-left border-none p-0 m-0 w-full space-y-2";
+                metaContent.innerHTML = `
+                    ${imageNodeStringBlock}
                     <div>
-                        <h1 id="view-name" class="text-lg font-bold uppercase tracking-wide text-slate-900">${nameVal}</h1>
-                        <h2 id="view-role" class="text-[11px] font-medium text-slate-500 tracking-wide">${roleVal}</h2>
+                        <h1 id="view-name" class="text-xl font-bold uppercase tracking-wide text-slate-900">${nameVal}</h1>
+                        <h2 id="view-role" class="text-xs font-medium text-slate-500 tracking-wide">${roleVal}</h2>
                     </div>
-                    <div id="contact-lines" class="flex items-center gap-x-2 text-[9.5px] text-slate-600 flex-wrap justify-end">
-                        <span>${emailVal}</span> <span class="divider">•</span> 
-                        <span>${phoneVal}</span> ${phoneVal && locVal ? '<span class="divider">•</span>' : ''} 
-                        <span>${locVal}</span> ${locVal && linkVal ? '<span class="divider">•</span>' : ''} 
+                    <div id="contact-lines" class="flex flex-col gap-y-1.5 text-[9.5px] text-slate-600 items-start mt-3 border-t pt-2 border-slate-100 w-full">
+                        <span>${emailVal}</span> 
+                        <span>${phoneVal}</span> 
+                        <span>${locVal}</span> 
                         <span>${linkVal}</span>
                     </div>
                 `;
-            } else {
-                document.getElementById('meta-panel').innerHTML = `
-                    <div id="meta-content" class="${currentLayout === 'left' ? 'text-left border-none p-0 m-0' : currentLayout === 'centered' ? 'text-center pb-2 mb-2 border-b border-slate-200' : 'text-center border-b-[1.5px] border-slate-800 pb-2.5 mb-2'}">
-                        <h1 id="view-name" class="text-xl font-bold uppercase tracking-wide mb-0.5 text-slate-900">${nameVal}</h1>
-                        <h2 id="view-role" class="text-xs font-medium text-slate-500 tracking-wide mb-2">${roleVal}</h2>
-                        <div id="contact-lines" class="${currentLayout === 'left' ? 'flex flex-col gap-y-1.5 text-[9.5px] text-slate-600 items-start mt-3' : 'flex justify-center items-center gap-x-2 text-[10px] text-slate-600 flex-wrap'}">
-                            <span>${emailVal}</span> ${currentLayout !== 'left' ? '<span class="divider">•</span>' : ''} 
-                            <span>${phoneVal}</span> ${currentLayout !== 'left' ? '<span class="divider">•</span>' : ''} 
-                            <span>${locVal}</span> ${currentLayout !== 'left' ? '<span class="divider">•</span>' : ''} 
-                            <span>${linkVal}</span>
+            } else if (currentLayout === 'compact') {
+                metaContent.className = "text-left border-b border-slate-800 pb-1 mb-2 flex justify-between items-center gap-4 w-full";
+                metaContent.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        ${imageNodeStringBlock}
+                        <div>
+                            <h1 id="view-name" class="text-lg font-bold uppercase tracking-wide text-slate-900">${nameVal}</h1>
+                            <h2 id="view-role" class="text-[11px] font-medium text-slate-500 tracking-wide">${roleVal}</h2>
                         </div>
                     </div>
+                    <div id="contact-lines" class="flex flex-col items-end gap-y-0.5 text-[9.5px] text-slate-600 justify-end text-right">
+                        <span>${emailVal}</span> 
+                        <span>${phoneVal}</span> 
+                        <span>${locVal}</span> 
+                        <span>${linkVal}</span>
+                    </div>
+                `;
+            } else if (currentLayout === 'centered') {
+                metaContent.className = "text-center pb-2 mb-2 border-b border-slate-200 flex flex-col items-center justify-center space-y-2";
+                metaContent.innerHTML = `
+                    ${imageNodeStringBlock}
+                    <div>
+                        <h1 id="view-name" class="text-xl font-bold uppercase tracking-wide mb-0.5 text-slate-900">${nameVal}</h1>
+                        <h2 id="view-role" class="text-xs font-medium text-slate-500 tracking-wide mb-2">${roleVal}</h2>
+                    </div>
+                    <div id="contact-lines" class="flex justify-center items-center gap-x-2 text-[10px] text-slate-600 flex-wrap">
+                        <span>${emailVal}</span> <span class="divider">•</span> 
+                        <span>${phoneVal}</span> <span class="divider">•</span> 
+                        <span>${locVal}</span> ${linkVal ? '<span class="divider">•</span> <span>' + linkVal + '</span>' : ''}
+                    </div>
+                `;
+            } else { // Standard Top Mode Default
+                metaContent.className = "text-left border-b-[1.5px] border-slate-800 pb-2.5 mb-2 flex justify-between items-end gap-4 w-full";
+                metaContent.innerHTML = `
+                    <div class="space-y-1">
+                        <h1 id="view-name" class="text-xl font-bold uppercase tracking-wide mb-0.5 text-slate-900">${nameVal}</h1>
+                        <h2 id="view-role" class="text-xs font-medium text-slate-500 tracking-wide mb-2">${roleVal}</h2>
+                        <div id="contact-lines" class="flex justify-start items-center gap-x-2 text-[10px] text-slate-600 flex-wrap">
+                            <span>${emailVal}</span> <span class="divider">•</span> 
+                            <span>${phoneVal}</span> <span class="divider">•</span> 
+                            <span>${locVal}</span> ${linkVal ? '<span class="divider">•</span> <span>' + linkVal + '</span>' : ''}
+                        </div>
+                    </div>
+                    ${imageNodeStringBlock}
                 `;
             }
             
