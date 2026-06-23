@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +10,10 @@
     <!-- ATS Friendly Google Fonts Integration -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&block=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&block=swap"
+        rel="stylesheet">
+
     <style>
         /* Base Page Setup for Screen Preview */
         .resume-page {
@@ -31,29 +34,65 @@
         }
 
         /* Dynamic Sizes via Classes */
-        .size-letter { width: 8.5in; height: 11in; padding: 0.5in; }
-        .size-a4     { width: 8.27in; height: 11.69in; padding: 0.5in; }
-        .size-long   { width: 8.5in; height: 13in; padding: 0.55in; }
+        .size-letter {
+            width: 8.5in;
+            height: 11in;
+            padding: 0.5in;
+        }
+
+        .size-a4 {
+            width: 8.27in;
+            height: 11.69in;
+            padding: 0.5in;
+        }
+
+        .size-long {
+            width: 8.5in;
+            height: 13in;
+            padding: 0.55in;
+        }
 
         /* Dynamic Font Configurations */
-        .font-inter { font-family: 'Inter', sans-serif; }
-        .font-roboto { font-family: 'Roboto', sans-serif; }
-        .font-opensans { font-family: 'Open Sans', sans-serif; }
-        .font-lora { font-family: 'Lora', serif; }
-        .font-merriweather { font-family: 'Merriweather', serif; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .font-inter {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .font-opensans {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .font-lora {
+            font-family: 'Lora', serif;
+        }
+
+        .font-merriweather {
+            font-family: 'Merriweather', serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
 
         /* Print Layout Forcing */
         @media print {
             body * {
                 visibility: hidden;
             }
-            #preview-container, #resume-preview, #resume-preview * {
+
+            #preview-container,
+            #resume-preview,
+            #resume-preview * {
                 visibility: visible;
             }
+
             body {
                 background: white !important;
             }
+
             #preview-container {
                 position: absolute;
                 left: 0;
@@ -64,6 +103,7 @@
                 margin: 0;
                 display: block;
             }
+
             .resume-page {
                 box-shadow: none !important;
                 margin: 0 !important;
@@ -71,6 +111,7 @@
                 background: white !important;
                 color: #0f172a !important;
             }
+
             .no-print {
                 display: none !important;
             }
@@ -80,29 +121,34 @@
         .custom-scroll::-webkit-scrollbar {
             width: 5px;
         }
+
         .custom-scroll::-webkit-scrollbar-thumb {
             background-color: #cbd5e1;
             border-radius: 3px;
         }
+
         .custom-scroll::-webkit-scrollbar-track {
             background-color: #ffffff;
         }
     </style>
 </head>
+
 <body class="bg-stone-50 text-slate-800 font-sans antialiased h-screen overflow-hidden">
 
     <div class="flex h-full w-full">
-        
+
         <!-- LEFT SIDE: ULTRA-CLEAN WHITE & #EEE BORDER CONTROL PANEL -->
         <div class="w-1/2 h-full bg-white border-r border-[#eee] flex flex-col no-print shadow-sm z-10">
-            
+
             <!-- Controls & Settings Header -->
             <div class="p-4 border-b border-[#eee] flex flex-wrap gap-3 justify-between items-center bg-white">
                 <div class="flex flex-wrap items-center gap-3">
                     <!-- Layout Config -->
                     <div class="flex items-center gap-1.5">
-                        <label for="layout-style" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Layout:</label>
-                        <select id="layout-style" onchange="changeLayout(this.value)" class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
+                        <label for="layout-style"
+                            class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Layout:</label>
+                        <select id="layout-style" onchange="changeLayout(this.value)"
+                            class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
                             <option value="top">Standard Top Header</option>
                             <option value="left">Split Left Column</option>
                             <option value="compact">Compact Minimalist Line</option>
@@ -112,8 +158,10 @@
 
                     <!-- Font Config -->
                     <div class="flex items-center gap-1.5">
-                        <label for="font-family" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Font:</label>
-                        <select id="font-family" onchange="changeFontFamily(this.value)" class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
+                        <label for="font-family"
+                            class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Font:</label>
+                        <select id="font-family" onchange="changeFontFamily(this.value)"
+                            class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
                             <option value="font-inter">Inter (Clean Sans)</option>
                             <option value="font-roboto">Roboto (Modern)</option>
                             <option value="font-opensans">Open Sans (Highly Readable)</option>
@@ -125,8 +173,10 @@
 
                     <!-- Size Config -->
                     <div class="flex items-center gap-1.5">
-                        <label for="font-size" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Size:</label>
-                        <select id="font-size" onchange="changeFontSize(this.value)" class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
+                        <label for="font-size"
+                            class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Size:</label>
+                        <select id="font-size" onchange="changeFontSize(this.value)"
+                            class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
                             <option value="text-[9px]">9px (Extra Compact)</option>
                             <option value="text-[10px]">10px (Compact)</option>
                             <option value="text-[10.5px]" selected>10.5px (Standard ATS)</option>
@@ -138,84 +188,90 @@
 
                     <!-- Paper Config -->
                     <div class="flex items-center gap-1.5">
-                        <label for="paper-size" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Paper:</label>
-                        <select id="paper-size" onchange="changePaperSize(this.value)" class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
+                        <label for="paper-size"
+                            class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Paper:</label>
+                        <select id="paper-size" onchange="changePaperSize(this.value)"
+                            class="bg-white border border-[#eee] text-[11px] font-medium rounded px-2 py-1 text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer">
                             <option value="size-letter">Letter</option>
                             <option value="size-a4">A4</option>
                             <option value="size-long">Long</option>
                         </select>
                     </div>
-                    
-                <button onclick="window.print()" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-semibold rounded shadow-sm transition">
-                    Print / Save PDF
-                </button>
+
+                    <button onclick="window.print()"
+                        class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-semibold rounded shadow-sm transition">
+                        Print / Save PDF
+                    </button>
                 </div>
 
-    <div class="flex items-start gap-4">
+                <div class="flex items-start gap-4">
 
-        <!-- Left: Upload -->
-        <div class="flex items-center gap-3">
-            <div id="upload-indicator-box"
-                class="w-14 h-14 border-2 border-dashed border-slate-300 bg-white flex items-center justify-center text-slate-400 text-[9px] text-center p-1 rounded font-medium">
-                No Photo
+                    <!-- Left: Upload -->
+                    <div class="flex items-center gap-3">
+                        <div id="upload-indicator-box"
+                            class="w-14 h-14 border-2 border-dashed border-slate-300 bg-white flex items-center justify-center text-slate-400 text-[9px] text-center p-1 rounded font-medium">
+                            No Photo
+                        </div>
+
+                        <img id="upload-preview-thumbnail" class="w-14 h-14 object-cover rounded border hidden"
+                            alt="Thumb">
+
+                        <div>
+                            <input type="file" id="photo-file-node" accept="image/*" class="hidden"
+                                onchange="executePhotoCropEngine(this)">
+
+                            <button type="button" onclick="document.getElementById('photo-file-node').click()"
+                                class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3 py-1.5 rounded transition-colors">
+                                Upload Photo
+                            </button>
+
+                            <button type="button" id="delete-photo-btn" onclick="purgeUploadedPhoto()"
+                                class="text-red-500 hover:underline text-xs ml-3 hidden">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Tips -->
+                    <div class="flex-1 text-[10px] text-slate-500 border-l border-slate-200 pl-4">
+                        <h4 class="font-semibold text-slate-700 mb-1">📌 Tips</h4>
+                        <ul class="list-disc pl-4 space-y-1">
+                            <li>Use a recent passport-style photo.</li>
+                            <li>Face the camera directly.</li>
+                            <li>Keep the background plain (white or light).</li>
+                            <li>Good lighting improves print quality.</li>
+                            <li>The image is automatically cropped to a 2×2 square.</li>
+                            <li>High-resolution images produce better PDF output.</li>
+                        </ul>
+                    </div>
+
+                </div>
             </div>
 
-            <img id="upload-preview-thumbnail"
-                class="w-14 h-14 object-cover rounded border hidden"
-                alt="Thumb">
-
-            <div>
-                <input type="file"
-                    id="photo-file-node"
-                    accept="image/*"
-                    class="hidden"
-                    onchange="executePhotoCropEngine(this)">
-
-                <button type="button"
-                    onclick="document.getElementById('photo-file-node').click()"
-                    class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3 py-1.5 rounded transition-colors">
-                    Upload Photo
-                </button>
-
-                <button type="button"
-                    id="delete-photo-btn"
-                    onclick="purgeUploadedPhoto()"
-                    class="text-red-500 hover:underline text-xs ml-3 hidden">
-                    Remove
-                </button>
-            </div>
-        </div>
-
-        <!-- Right: Tips -->
-        <div class="flex-1 text-[10px] text-slate-500 border-l border-slate-200 pl-4">
-            <h4 class="font-semibold text-slate-700 mb-1">📌 Tips</h4>
-            <ul class="list-disc pl-4 space-y-1">
-                <li>Use a recent passport-style photo.</li>
-                <li>Face the camera directly.</li>
-                <li>Keep the background plain (white or light).</li>
-                <li>Good lighting improves print quality.</li>
-                <li>The image is automatically cropped to a 2×2 square.</li>
-                <li>High-resolution images produce better PDF output.</li>
-            </ul>
-        </div>
-
-            </div>
-            </div>
-            
 
             <!-- Inputs Container -->
             <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scroll pb-24" id="form-container">
-                
+
                 <!-- Contact Details -->
                 <section class="space-y-3">
-                    <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-[#eee] pb-1">Personal Details</h2>
+                    <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-[#eee] pb-1">
+                        Personal Details</h2>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="input-name" value="Patrick John M. Veniegas" placeholder="Full Name" class="col-span-2 px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
-                        <input type="text" id="input-role" value="Full Stack Web Developer" placeholder="Target Position" class="col-span-2 px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
-                        <input type="email" id="input-email" value="patrickveniegas@gmail.com" placeholder="Email Address" class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
-                        <input type="text" id="input-phone" value="+63 912 345 6789" placeholder="Phone Number" class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
-                        <input type="text" id="input-location" value="Binalonan, Philippines" placeholder="Location" class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
-                        <input type="text" id="input-link" value="github.com/ventrix1421-arch" placeholder="Portfolio / LinkedIn" class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-name" value="Patrick John M. Veniegas" placeholder="Full Name"
+                            class="col-span-2 px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-role" value="Full Stack Web Developer"
+                            placeholder="Target Position"
+                            class="col-span-2 px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="email" id="input-email" value="patrickveniegas@gmail.com"
+                            placeholder="Email Address"
+                            class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-phone" value="+63 912 345 6789" placeholder="Phone Number"
+                            class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-location" value="Binalonan, Philippines" placeholder="Location"
+                            class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
+                        <input type="text" id="input-link" value="github.com/ventrix1421-arch"
+                            placeholder="Portfolio / LinkedIn"
+                            class="px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">
                     </div>
                 </section>
 
@@ -223,29 +279,43 @@
                 <section class="space-y-3">
                     <div class="flex gap-2 items-center border-b border-[#eee] pb-1">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Title:</span>
-                        <input type="text" id="input-summary-title" value="Professional Summary" placeholder="e.g., Objectives" class="bg-transparent text-xs font-bold text-slate-800 uppercase tracking-wider outline-none border border-transparent focus:border-slate-300 px-1 py-0.5 rounded transition w-1/2">
+                        <input type="text" id="input-summary-title" value="Professional Summary"
+                            placeholder="e.g., Objectives"
+                            class="bg-transparent text-xs font-bold text-slate-800 uppercase tracking-wider outline-none border border-transparent focus:border-slate-300 px-1 py-0.5 rounded transition w-1/2">
                     </div>
-                    <textarea id="input-summary" rows="3" placeholder="Write your profile statement here..." class="w-full px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">Versatile Full Stack Developer with 3+ years of experience engineering high-performance, responsive web applications. Highly proficient in JavaScript, modern frameworks, and optimized database management. Proven track record of delivering clean, scalable code and seamless user experiences while managing complex data structures across robust, end-to-end software development lifecycles.</textarea>
+                    <textarea id="input-summary" rows="3" placeholder="Write your profile statement here..."
+                        class="w-full px-3 py-2 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs focus:border-slate-400 outline-none transition">Versatile Full Stack Developer with 3+ years of experience engineering high-performance, responsive web applications. Highly proficient in JavaScript, modern frameworks, and optimized database management. Proven track record of delivering clean, scalable code and seamless user experiences while managing complex data structures across robust, end-to-end software development lifecycles.</textarea>
                 </section>
 
                 <!-- Experience -->
                 <section class="space-y-3">
                     <div class="flex justify-between items-center border-b border-[#eee] pb-1">
                         <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Work Experience</h2>
-                        <button onclick="addExperience()" class="inline-flex items-center gap-1 text-[10px] bg-white hover:bg-slate-50 border border-[#eee] text-slate-700 px-2 py-1 rounded font-medium transition">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg> Add Experience
+                        <button onclick="addExperience()"
+                            class="inline-flex items-center gap-1 text-[10px] bg-white hover:bg-slate-50 border border-[#eee] text-slate-700 px-2 py-1 rounded font-medium transition">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M12 4v16m8-8H4" />
+                            </svg> Add Experience
                         </button>
                     </div>
                     <div id="experience-fields" class="space-y-3">
                         <div class="experience-item p-3 border border-[#eee] rounded bg-stone-50/50 relative space-y-2">
-                            <button onclick="this.parentElement.remove(); triggerUpdate();" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xs">✕</button>
+                            <button onclick="this.parentElement.remove(); triggerUpdate();"
+                                class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xs">✕</button>
                             <div class="grid grid-cols-2 gap-2">
-                                <input type="text" placeholder="Company Name" value="Tech Innovations Inc." class="exp-company px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
-                                <input type="text" placeholder="Job Title" value="Junior Developer" class="exp-role px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
-                                <input type="text" placeholder="Duration" value="2024 - Present" class="exp-date px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
-                                <input type="text" placeholder="Location" value="Makati City" class="exp-loc px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Company Name" value="Tech Innovations Inc."
+                                    class="exp-company px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Job Title" value="Junior Developer"
+                                    class="exp-role px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Duration" value="2024 - Present"
+                                    class="exp-date px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Location" value="Makati City"
+                                    class="exp-loc px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
                             </div>
-                            <textarea placeholder="Job Responsibilities (One item per line)" class="exp-desc w-full px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs" rows="2">• Developed features using React and Node.js.&#10;• Improved page loading speeds by 15%.</textarea>
+                            <textarea placeholder="Job Responsibilities (One item per line)"
+                                class="exp-desc w-full px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs"
+                                rows="2">• Developed features using React and Node.js.&#10;• Improved page loading speeds by 15%.</textarea>
                         </div>
                     </div>
                 </section>
@@ -254,17 +324,26 @@
                 <section class="space-y-3">
                     <div class="flex justify-between items-center border-b border-[#eee] pb-1">
                         <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Education</h2>
-                        <button onclick="addEducation()" class="inline-flex items-center gap-1 text-[10px] bg-white hover:bg-slate-50 border border-[#eee] text-slate-700 px-2 py-1 rounded font-medium transition">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg> Add Education
+                        <button onclick="addEducation()"
+                            class="inline-flex items-center gap-1 text-[10px] bg-white hover:bg-slate-50 border border-[#eee] text-slate-700 px-2 py-1 rounded font-medium transition">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M12 4v16m8-8H4" />
+                            </svg> Add Education
                         </button>
                     </div>
                     <div id="education-fields" class="space-y-3">
                         <div class="education-item p-3 border border-[#eee] rounded bg-stone-50/50 relative space-y-2">
-                            <button onclick="this.parentElement.remove(); triggerUpdate();" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xs">✕</button>
+                            <button onclick="this.parentElement.remove(); triggerUpdate();"
+                                class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xs">✕</button>
                             <div class="grid grid-cols-2 gap-2">
-                                <input type="text" placeholder="School/University" value="Polytechnic University of the Philippines" class="edu-school px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs col-span-2">
-                                <input type="text" placeholder="Degree / Course" value="B.S. in Information Technology" class="edu-degree px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
-                                <input type="text" placeholder="Year Graduated" value="2023" class="edu-date px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="School/University"
+                                    value="Polytechnic University of the Philippines"
+                                    class="edu-school px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs col-span-2">
+                                <input type="text" placeholder="Degree / Course" value="B.S. in Information Technology"
+                                    class="edu-degree px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
+                                <input type="text" placeholder="Year Graduated" value="2023"
+                                    class="edu-date px-2 py-1.5 border border-[#eee] bg-white text-slate-800 rounded text-xs">
                             </div>
                         </div>
                     </div>
@@ -279,14 +358,20 @@
                 <section class="p-4 bg-white border border-dashed border-slate-300 rounded-xl space-y-3">
                     <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Create Custom Section</h3>
                     <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="new-section-title" placeholder="e.g., Projects, Certifications, Skills" class="col-span-2 px-3 py-1.5 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs outline-none focus:border-slate-400">
-                        <select id="new-section-type" class="bg-white border border-[#eee] text-xs rounded px-2 text-slate-700 outline-none focus:border-slate-400">
+                        <input type="text" id="new-section-title" placeholder="e.g., Projects, Certifications, Skills"
+                            class="col-span-2 px-3 py-1.5 border border-[#eee] bg-white text-slate-800 placeholder-slate-400 rounded text-xs outline-none focus:border-slate-400">
+                        <select id="new-section-type"
+                            class="bg-white border border-[#eee] text-xs rounded px-2 text-slate-700 outline-none focus:border-slate-400">
                             <option value="bullet">Bullet List Block</option>
                             <option value="list">List Block (Label: item, item)</option>
                             <option value="paragraph">Paragraph Block</option>
                         </select>
-                        <button onclick="createNewSection()" class="inline-flex items-center justify-center gap-1 bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg> Add Section
+                        <button onclick="createNewSection()"
+                            class="inline-flex items-center justify-center gap-1 bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded text-xs font-semibold shadow-sm transition">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M12 4v16m8-8H4" />
+                            </svg> Add Section
                         </button>
                     </div>
                 </section>
@@ -295,22 +380,26 @@
         </div>
 
         <!-- RIGHT SIDE: REALTIME LIVE PREVIEW -->
-        <div id="preview-container" class="w-1/2 h-full bg-stone-100 overflow-y-auto flex items-start justify-center p-8 custom-scroll">
-            
+        <div id="preview-container"
+            class="w-1/2 h-full bg-stone-100 overflow-y-auto flex items-start justify-center p-8 custom-scroll">
+
             <!-- Target Document Frame -->
-            <div id="resume-preview" class="resume-page size-letter text-slate-900 text-[10.5px] leading-relaxed font-inter">
-                
+            <div id="resume-preview"
+                class="resume-page size-letter text-slate-900 text-[10.5px] leading-relaxed font-inter">
+
                 <div id="layout-wrapper" class="h-full flex flex-col">
-                    
+
                     <!-- TOP / PANEL HEADER CONTAINER -->
                     <div id="meta-panel" class="mb-4">
                         <div id="meta-content" class="text-center border-b-[1.5px] border-slate-800 pb-2.5 mb-2">
-                            <h1 id="view-name" class="text-xl font-bold uppercase tracking-wide mb-0.5 text-slate-900"></h1>
+                            <h1 id="view-name" class="text-xl font-bold uppercase tracking-wide mb-0.5 text-slate-900">
+                            </h1>
                             <h2 id="view-role" class="text-xs font-medium text-slate-500 tracking-wide mb-2"></h2>
-                            <div id="contact-lines" class="flex justify-center items-center gap-x-2 text-[10px] text-slate-600 flex-wrap">
-                                <span id="view-email"></span> <span class="divider">•</span> 
-                                <span id="view-phone"></span> <span class="divider">•</span> 
-                                <span id="view-location"></span> <span class="divider">•</span> 
+                            <div id="contact-lines"
+                                class="flex justify-center items-center gap-x-2 text-[10px] text-slate-600 flex-wrap">
+                                <span id="view-email"></span> <span class="divider">•</span>
+                                <span id="view-phone"></span> <span class="divider">•</span>
+                                <span id="view-location"></span> <span class="divider">•</span>
                                 <span id="view-link"></span>
                             </div>
                         </div>
@@ -320,19 +409,27 @@
                     <div id="main-panel" class="flex-1 space-y-4">
                         <!-- Summary Block -->
                         <div class="section-container">
-                            <h3 id="view-summary-title" class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">Professional Summary</h3>
-                            <p id="view-summary" class="text-slate-700 text-justify tracking-normal break-words whitespace-normal overflow-wrap-anywhere"></p>
+                            <h3 id="view-summary-title"
+                                class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">
+                                Professional Summary</h3>
+                            <p id="view-summary"
+                                class="text-slate-700 text-justify tracking-normal break-words whitespace-normal overflow-wrap-anywhere">
+                            </p>
                         </div>
 
                         <!-- Experience -->
                         <div class="section-container">
-                            <h3 class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1.5 text-slate-800">Professional Experience</h3>
+                            <h3
+                                class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1.5 text-slate-800">
+                                Professional Experience</h3>
                             <div id="view-experience-group" class="space-y-2.5"></div>
                         </div>
 
                         <!-- Education -->
                         <div class="section-container">
-                            <h3 class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">Education</h3>
+                            <h3
+                                class="section-title text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">
+                                Education</h3>
                             <div id="view-education-group" class="space-y-1.5"></div>
                         </div>
 
@@ -355,22 +452,36 @@
         let customSectionsList = [];
         let currentLayout = 'top';
         let processedPhotoBase64Stream = null;
+        let autoSaveTimer = null;
+let isSaving = false;
+
+function getResumeData() {
+    return {
+        name: document.getElementById("input-name").value,
+        role: document.getElementById("input-role").value,
+        email: document.getElementById("input-email").value,
+        phone: document.getElementById("input-phone").value,
+        location: document.getElementById("input-location").value,
+        link: document.getElementById("input-link").value,
+        summary: document.getElementById("input-summary").value
+    };
+}
 
         // 2x2 Image Transformer Crop Processing Utility Engine Block
         function executePhotoCropEngine(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const canvasImg = new Image();
-                    canvasImg.onload = function() {
+                    canvasImg.onload = function () {
                         const canvas = document.getElementById('photo-crop-canvas');
                         const ctx = canvas.getContext('2d');
-                        
+
                         // Strict 1:1 Aspect ratio square crop generation formula algorithms logic
                         let sideLength = canvasImg.width;
                         let startPointX = 0;
                         let startPointY = 0;
-                        
+
                         if (canvasImg.width > canvasImg.height) {
                             sideLength = canvasImg.height;
                             startPointX = (canvasImg.width - canvasImg.height) / 2;
@@ -378,19 +489,19 @@
                             sideLength = canvasImg.width;
                             startPointY = (canvasImg.height - canvasImg.width) / 2;
                         }
-                        
+
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         ctx.drawImage(canvasImg, startPointX, startPointY, sideLength, sideLength, 0, 0, canvas.width, canvas.height);
-                        
+
                         processedPhotoBase64Stream = canvas.toDataURL('image/jpeg', 0.95);
-                        
+
                         // Update control panel view states cleanly
                         document.getElementById('upload-indicator-box').classList.add('hidden');
                         const thumb = document.getElementById('upload-preview-thumbnail');
                         thumb.src = processedPhotoBase64Stream;
                         thumb.classList.remove('hidden');
                         document.getElementById('delete-photo-btn').classList.remove('hidden');
-                        
+
                         renderLivePreview();
                     };
                     canvasImg.src = e.target.result;
@@ -430,7 +541,7 @@
             const metaContent = document.getElementById('meta-content');
             const contactLines = document.getElementById('contact-lines');
             const dividers = document.querySelectorAll('.divider');
-            
+
 
             // Reset dynamic setups cleanly
             wrapper.className = "h-full flex flex-col";
@@ -461,7 +572,7 @@
             const preview = document.getElementById('resume-preview');
             preview.classList.remove('size-letter', 'size-a4', 'size-long');
             preview.classList.add(selectedClass);
-            
+
             const styleId = "print-size-css";
             let printStyle = document.getElementById(styleId);
             if (!printStyle) {
@@ -469,11 +580,11 @@
                 printStyle.id = styleId;
                 document.head.appendChild(printStyle);
             }
-            
+
             let sizeRule = "letter";
-            if(selectedClass === 'size-a4') sizeRule = "A4";
-            if(selectedClass === 'size-long') sizeRule = "8.5in 13in";
-            
+            if (selectedClass === 'size-a4') sizeRule = "A4";
+            if (selectedClass === 'size-long') sizeRule = "8.5in 13in";
+
             printStyle.innerHTML = `@media print { @page { size: ${sizeRule}; margin: 0; } }`;
         }
 
@@ -481,13 +592,13 @@
         function createNewSection() {
             const titleInput = document.getElementById('new-section-title');
             const typeSelect = document.getElementById('new-section-type');
-            
+
             const title = titleInput.value.trim();
             const type = typeSelect.value;
-            if(!title) return;
+            if (!title) return;
 
             const sectionId = "custom-" + title.toLowerCase().replace(/[^a-z0-9]/g, "-");
-            if(customSectionsList.some(sec => sec.id === sectionId)) {
+            if (customSectionsList.some(sec => sec.id === sectionId)) {
                 alert("This section title already exists!");
                 return;
             }
@@ -501,7 +612,7 @@
             sectionHTML.setAttribute('data-name', title);
             sectionHTML.setAttribute('data-type', type);
 
-            if(type === 'list') {
+            if (type === 'list') {
                 sectionHTML.innerHTML = `
                     <div class="flex justify-between items-center">
                         <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">${title} (List View)</h2>
@@ -534,7 +645,7 @@
             }
 
             fieldsContainer.appendChild(sectionHTML);
-            titleInput.value = ''; 
+            titleInput.value = '';
             attachListeners();
             renderLivePreview();
         }
@@ -592,7 +703,59 @@
             attachListeners();
         }
 
-         function renderLivePreview() {
+       async function autoSaveResume() {
+
+    if (isSaving) return;
+
+    isSaving = true;
+
+    try {
+        const res = await fetch("api/save.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(getResumeData())
+        });
+
+        const result = await res.json();
+
+        console.log("Auto-saved:", result);
+
+    } catch (err) {
+        console.error("Auto-save failed:", err);
+    }
+
+    isSaving = false;
+}
+
+function triggerAutoSave() {
+
+    clearTimeout(autoSaveTimer);
+
+    autoSaveTimer = setTimeout(() => {
+        autoSaveResume();
+    }, 1500); // 1.5 seconds after user stops typing
+}
+
+const inputsToWatch = [
+    "input-name",
+    "input-role",
+    "input-email",
+    "input-phone",
+    "input-location",
+    "input-link",
+    "input-summary"
+];
+
+inputsToWatch.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener("input", triggerAutoSave);
+    }
+});
+
+        function renderLivePreview() {
             const nameVal = document.getElementById('input-name').value || "Your Name";
             const roleVal = document.getElementById('input-role').value || "Target Role Position";
             const emailVal = document.getElementById('input-email').value || "email@address.com";
@@ -667,7 +830,7 @@
                     ${imageNodeStringBlock}
                 `;
             }
-            
+
             const dynamicTitle = document.getElementById('input-summary-title').value || "Professional Summary";
             document.getElementById('view-summary-title').innerText = dynamicTitle;
             document.getElementById('view-summary').innerText = document.getElementById('input-summary').value;
@@ -682,15 +845,15 @@
                 const loc = item.querySelector('.exp-loc').value;
                 const desc = item.querySelector('.exp-desc').value;
 
-                if(company || role) {
+                if (company || role) {
                     const block = document.createElement('div');
                     block.className = "break-words whitespace-normal";
                     let bulletsHTML = '';
-                    if(desc) {
+                    if (desc) {
                         desc.split('\n').forEach(line => {
                             let clean = line.trim();
-                            if(clean.startsWith('•') || clean.startsWith('-')) clean = clean.substring(1).trim();
-                            if(clean) bulletsHTML += `<li class="break-words">${clean}</li>`;
+                            if (clean.startsWith('•') || clean.startsWith('-')) clean = clean.substring(1).trim();
+                            if (clean) bulletsHTML += `<li class="break-words">${clean}</li>`;
                         });
                     }
                     block.innerHTML = `
@@ -716,7 +879,7 @@
                 const degree = item.querySelector('.edu-degree').value;
                 const date = item.querySelector('.edu-date').value;
 
-                if(school || degree) {
+                if (school || degree) {
                     const row = document.createElement('div');
                     row.className = "flex justify-between items-baseline break-words text-slate-900";
                     row.innerHTML = `
@@ -730,25 +893,25 @@
             // Compile Custom Viewports
             const customContainer = document.getElementById('view-custom-group');
             customContainer.innerHTML = '';
-            
+
             document.querySelectorAll('.custom-section-node').forEach(node => {
                 const name = node.getAttribute('data-name');
                 const type = node.getAttribute('data-type');
-                
+
                 const block = document.createElement('div');
                 block.className = "break-words";
-                
+
                 if (type === 'list') {
                     let rowsHTML = '';
                     node.querySelectorAll('.item-row').forEach(row => {
                         const label = row.querySelector('.list-label').value.trim();
                         const values = row.querySelector('.list-values').value.trim();
-                        if(label || values) {
+                        if (label || values) {
                             rowsHTML += `<p class="text-slate-700 break-words"><strong class="font-bold text-slate-800">${label}:</strong> ${values}</p>`;
                         }
                     });
-                    
-                    if(rowsHTML) {
+
+                    if (rowsHTML) {
                         block.innerHTML = `
                             <h3 class="text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">${name}</h3>
                             <div class="space-y-0.5 break-words">${rowsHTML}</div>
@@ -757,12 +920,12 @@
                     }
                 } else if (type === 'bullet') {
                     const textVal = node.querySelector('.custom-value-input').value.trim();
-                    if(textVal) {
+                    if (textVal) {
                         let bulletsHTML = '';
                         textVal.split('\n').forEach(line => {
                             let clean = line.trim();
-                            if(clean.startsWith('•') || clean.startsWith('-')) clean = clean.substring(1).trim();
-                            if(clean) bulletsHTML += `<li class="break-words">${clean}</li>`;
+                            if (clean.startsWith('•') || clean.startsWith('-')) clean = clean.substring(1).trim();
+                            if (clean) bulletsHTML += `<li class="break-words">${clean}</li>`;
                         });
 
                         block.innerHTML = `
@@ -773,7 +936,7 @@
                     }
                 } else {
                     const textVal = node.querySelector('.custom-value-input').value.trim();
-                    if(textVal) {
+                    if (textVal) {
                         block.innerHTML = `
                             <h3 class="text-[10.5px] font-bold uppercase tracking-wider border-b border-slate-200 pb-0.5 mb-1 text-slate-800">${name}</h3>
                             <p class="text-slate-700 text-justify break-words">${textVal}</p>
@@ -805,4 +968,5 @@
         });
     </script>
 </body>
+
 </html>
